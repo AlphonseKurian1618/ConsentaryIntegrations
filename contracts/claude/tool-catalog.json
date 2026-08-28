@@ -1,0 +1,52 @@
+{
+  "descriptionLimitBytes": 2048,
+  "skillRequired": false,
+  "tools": {
+    "list_available_properties": {
+      "title": "List available vault properties",
+      "annotations": {
+        "readOnlyHint": true,
+        "openWorldHint": false
+      }
+    },
+    "list_templates": {
+      "title": "List vault templates",
+      "annotations": {
+        "readOnlyHint": true,
+        "openWorldHint": false
+      }
+    },
+    "request_properties": {
+      "title": "Request vault properties",
+      "annotations": {
+        "readOnlyHint": true,
+        "openWorldHint": false
+      }
+    },
+    "add_properties": {
+      "title": "Propose vault changes",
+      "annotations": {
+        "readOnlyHint": false,
+        "destructiveHint": true,
+        "idempotentHint": false,
+        "openWorldHint": false
+      }
+    }
+  },
+  "workflowInvariants": [
+    "discover before requesting or updating",
+    "inspect templates before creation",
+    "copy handles and metadata exactly",
+    "never poll",
+    "refresh discovery after writes"
+  ],
+  "stableInterface": [
+    "tool names",
+    "input schemas",
+    "result shapes",
+    "OAuth scopes",
+    "error codes",
+    "approval behavior"
+  ]
+}
+
