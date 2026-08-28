@@ -7,7 +7,8 @@
 - Flow: Authorization Code with PKCE S256
 - Scopes: `mcp:access offline_access`
 - Current redirect URI: `https://claude.ai/api/mcp/auth_callback`
-- Forward-compatible redirect URI: `https://claude.com/api/mcp/auth_callback`
+- Anticipated future redirect URI: `https://claude.com/api/mcp/auth_callback`, to be accepted only
+  after Claude publishes it through validated client metadata
 - Claude client metadata document: `https://claude.ai/oauth/mcp-oauth-client-metadata`
 - Token endpoint authentication: `none`
 
@@ -46,6 +47,10 @@ Repeating the previously failing production authorization request resolved the e
 reached branded Consentary Universal Login instead of returning `Unknown client`. Interactive login,
 consent, callback, refresh, disconnect, and reconnect remain connector acceptance steps rather than
 tenant-registration blockers.
+
+Do not add the anticipated `claude.com` callback manually or as a wildcard. When Claude publishes
+new validated client metadata, register that metadata document or use **Refresh Application** and
+review its mapped callback before saving.
 
 After registration, repeat the authorization request and verify:
 
