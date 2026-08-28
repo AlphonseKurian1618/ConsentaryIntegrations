@@ -1,0 +1,13 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-plugin-manifest.json",
+  "name": "consentary-vault",
+  "displayName": "Consentary Vault",
+  "version": "1.0.0",
+  "description": "Connects AI assistants to Consentary with phone-approved vault workflows and session-only handling of vault data.",
+  "author": {
+    "name": "Consentary",
+    "url": "https://consentary.com"
+  },
+  "homepage": "https://consentary.com",
+  "keywords": ["consentary", "vault", "privacy", "mcp"]
+}

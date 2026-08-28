@@ -1,0 +1,12 @@
+{
+  "provider": "anthropic-claude",
+  "toolCatalog": "../common/tool-catalog.json",
+  "mcpEndpoint": "https://consentary.com/mcp",
+  "clientMetadataDocument": "https://claude.ai/oauth/mcp-oauth-client-metadata",
+  "redirectUris": [
+    "https://claude.ai/api/mcp/auth_callback"
+  ],
+  "scopes": ["mcp:access", "offline_access"],
+  "pkceMethods": ["S256"],
+  "tokenEndpointAuthMethod": "none"
+}

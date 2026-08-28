@@ -10,6 +10,7 @@ sanitized test evidence. It does not implement the Consentary MCP server or iPho
   around phone consent.
 - Treat MCP tool metadata and server-side validation as the operating contract. Provider guidance
   may explain that contract but may not weaken it.
-- Keep each provider under `providers/<provider>/` and its machine-readable expectations under
-  `contracts/<provider>/`.
-
+- Keep provider-specific material under `providers/<provider>/` and `contracts/<provider>/`.
+- Put cross-provider tool contracts under `contracts/common/` and reusable plugin assets under
+  `plugins/`. Provider packages must reference those shared sources instead of copying prompts,
+  MCP configuration, or tool metadata.

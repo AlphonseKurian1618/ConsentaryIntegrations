@@ -1,0 +1,33 @@
+{
+  "version": 1,
+  "mcpEndpoint": "https://consentary.com/mcp",
+  "knownProviders": {
+    "chatgpt": {
+      "displayName": "ChatGPT",
+      "identityAssurance": "known_provider",
+      "connectionMethod": "consentary_plugin_oauth"
+    },
+    "claude": {
+      "displayName": "Claude",
+      "identityAssurance": "known_provider",
+      "connectionMethod": "consentary_plugin_oauth"
+    },
+    "vscode": {
+      "displayName": "Visual Studio Code",
+      "identityAssurance": "known_provider",
+      "connectionMethod": "remote_mcp_oauth"
+    }
+  },
+  "genericClient": {
+    "provider": "generic_mcp",
+    "identityAssurance": "oauth_registered_unverified",
+    "connectionMethod": "remote_mcp_oauth",
+    "displayNameSource": "signed_auth0_registered_client_name",
+    "ignoredIdentitySources": ["mcp_initialize_client_info"]
+  },
+  "disconnect": {
+    "order": ["block_at_consentary", "delete_auth0_grants", "verify_grants_absent"],
+    "retryState": "cleanup_pending",
+    "reconnectRequiresFreshOAuth": true
+  }
+}

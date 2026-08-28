@@ -1,6 +1,12 @@
 {
   "descriptionLimitBytes": 2048,
-  "skillRequired": false,
+  "pluginRequired": false,
+  "securitySchemes": [
+    {
+      "type": "oauth2",
+      "scopes": ["mcp:access"]
+    }
+  ],
   "tools": {
     "list_available_properties": {
       "title": "List available vault properties",
@@ -49,4 +55,3 @@
     "approval behavior"
   ]
 }
-

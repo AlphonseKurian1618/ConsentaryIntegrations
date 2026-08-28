@@ -1,0 +1,20 @@
+{
+  "name": "consentary-plugins",
+  "interface": {
+    "displayName": "Consentary Plugins"
+  },
+  "plugins": [
+    {
+      "name": "consentary-vault",
+      "source": {
+        "source": "local",
+        "path": "./plugins/consentary-vault"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity"
+    }
+  ]
+}

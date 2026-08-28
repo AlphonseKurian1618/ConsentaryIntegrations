@@ -1,0 +1,17 @@
+{
+  "provider": "generic-remote-mcp",
+  "toolCatalog": "../common/tool-catalog.json",
+  "agentCatalog": "../common/agent-catalog.json",
+  "mcpEndpoint": "https://consentary.com/mcp",
+  "scopes": ["mcp:access", "offline_access"],
+  "pkceMethods": ["S256"],
+  "clientSecretRequestedFromUser": false,
+  "displayNameSource": "signed_auth0_registered_client_name",
+  "brandIdentityVerified": false,
+  "distribution": {
+    "agentPluginManifest": "../../plugins/consentary-vault/plugin.json",
+    "portableMcpConfig": "../../plugins/consentary-vault/mcp.json",
+    "skill": "../../plugins/consentary-vault/skills/vault-workflows/SKILL.md"
+  },
+  "skillRequiredForAuthorization": false
+}

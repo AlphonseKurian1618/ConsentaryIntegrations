@@ -1,0 +1,31 @@
+{
+  "name": "consentary-vault",
+  "version": "1.0.0",
+  "description": "Use Consentary's phone-approved vault through one reusable remote MCP workflow.",
+  "author": {
+    "name": "Consentary",
+    "url": "https://consentary.com"
+  },
+  "homepage": "https://consentary.com/connectors/chatgpt",
+  "repository": "https://github.com/AlphonseKurian1618/ConsentaryIntegrations",
+  "skills": "./skills",
+  "mcpServers": "./.mcp.json",
+  "apps": "./.app.json",
+  "interface": {
+    "displayName": "Consentary Vault",
+    "shortDescription": "Phone-approved access to your local vault",
+    "longDescription": "Discover vault metadata, selectively disclose approved values, and propose vault changes that remain subject to review on the linked iPhone.",
+    "developerName": "Consentary",
+    "category": "Productivity",
+    "capabilities": ["Remote MCP", "OAuth", "Selective disclosure", "Phone-approved changes"],
+    "websiteURL": "https://consentary.com/connectors/chatgpt",
+    "privacyPolicyURL": "https://consentary.com/privacy",
+    "termsOfServiceURL": "https://consentary.com/terms",
+    "defaultPrompt": [
+      "Show what information is available in my Consentary vault without requesting values.",
+      "Ask my phone to share only the Consentary fields I select.",
+      "Inspect Consentary templates, then propose a vault change for phone review."
+    ],
+    "brandColor": "#163B83"
+  }
+}

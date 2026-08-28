@@ -1,0 +1,14 @@
+{
+  "provider": "openai-chatgpt",
+  "toolCatalog": "../common/tool-catalog.json",
+  "mcpEndpoint": "https://consentary.com/mcp",
+  "stableClientMetadataDocument": "https://chatgpt.com/oauth/client.json",
+  "stableRedirectUri": "https://chatgpt.com/connector_platform_oauth_redirect",
+  "clientMetadataDocument": "https://chatgpt.com/oauth/lDHHA7lBl98a/client.json",
+  "redirectUri": "https://chatgpt.com/connector/oauth/lDHHA7lBl98a",
+  "pluginRedirectUriPattern": "https://chatgpt.com/connector/oauth/{callback_id}",
+  "scopes": ["mcp:access", "offline_access"],
+  "pkceMethods": ["S256"],
+  "tokenEndpointAuthMethod": "private_key_jwt",
+  "pluginConnectionIdPrefix": "plugin_asdk_app_"
+}

@@ -5,8 +5,8 @@ Consentary is exposed to Claude as an OAuth-protected remote MCP connector at
 available on Claude mobile after the same account is linked and its tools are enabled.
 
 Version 1 uses the existing four-tool MCP contract. It requires no Anthropic SDK, Anthropic API
-key, static Claude OAuth client, client secret, token persistence, Claude-specific iOS code, or
-Claude Skill. MCP metadata and server-side validation are the canonical operating contract.
+key, static Claude OAuth client, client secret, token persistence, or Claude-specific iOS code.
+MCP metadata and server-side validation are the canonical operating contract.
 
 ## Supported workflow
 
@@ -45,7 +45,7 @@ The public, no-tracking user guide is
 - **Tools are missing on mobile:** finish linking on web or Desktop, open a new mobile conversation,
   and enable the connected tools.
 
-See [`rollout.md`](rollout.md) for the release gate. The pilot runs without a skill. A separate,
-instruction-only `Consentary Vault Workflows` skill may be considered only if more than 10% of
-scripted workflows need correction for tool order, invented handles, or partial-approval handling.
-
+See [`rollout.md`](rollout.md) for the release gate. The connector can run independently, while the
+distributable [`Consentary Vault` plugin](../../plugins/consentary-vault/) bundles the shared remote
+MCP connection and workflow guidance for broad installation. The same instruction source is used
+for Claude, ChatGPT, and Codex; provider-specific copies are prohibited.

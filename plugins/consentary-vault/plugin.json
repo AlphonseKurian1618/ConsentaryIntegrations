@@ -1,0 +1,13 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "consentary-vault",
+  "version": "1.0.0",
+  "description": "Connects skills-compatible agents to Consentary with phone-approved vault workflows and session-only handling of vault data.",
+  "author": {
+    "name": "Consentary",
+    "url": "https://consentary.com"
+  },
+  "homepage": "https://consentary.com",
+  "repository": "https://github.com/AlphonseKurian1618/ConsentaryIntegrations",
+  "keywords": ["consentary", "vault", "privacy", "mcp"]
+}

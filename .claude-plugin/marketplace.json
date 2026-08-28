@@ -1,0 +1,17 @@
+{
+  "name": "consentary-plugins",
+  "owner": {
+    "name": "Consentary",
+    "url": "https://consentary.com"
+  },
+  "description": "Official Consentary plugins for Claude.",
+  "plugins": [
+    {
+      "name": "consentary-vault",
+      "source": "./plugins/consentary-vault",
+      "description": "Connects Claude to Consentary with phone-approved vault workflows and session-only handling of vault data.",
+      "category": "Productivity",
+      "tags": ["consentary", "vault", "privacy", "mcp"]
+    }
+  ]
+}

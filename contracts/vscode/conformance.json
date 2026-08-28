@@ -1,0 +1,16 @@
+{
+  "provider": "microsoft-vscode",
+  "toolCatalog": "../common/tool-catalog.json",
+  "agentCatalog": "../common/agent-catalog.json",
+  "mcpEndpoint": "https://consentary.com/mcp",
+  "scopes": ["mcp:access", "offline_access"],
+  "pkceMethods": ["S256"],
+  "tokenEndpointAuthMethod": "none",
+  "identity": "exact_auth0_client_id_allowlist",
+  "distribution": {
+    "agentPluginManifest": "../../plugins/consentary-vault/plugin.json",
+    "portableMcpConfig": "../../plugins/consentary-vault/mcp.json",
+    "skill": "../../plugins/consentary-vault/skills/vault-workflows/SKILL.md"
+  },
+  "skillRequiredForAuthorization": false
+}

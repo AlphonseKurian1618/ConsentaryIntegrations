@@ -40,8 +40,9 @@ third-party clients. This is CIMD registration, not a static Consentary-owned Cl
 Claude's CIMD was validated and registered in the production tenant. The imported mapping retained
 the exact `claude.ai` callback, Authorization Code and Refresh Token grants, native application type,
 token endpoint authentication `none`, and strict third-party ownership. Production API access shows
-one of two user-delegated permissions: `mcp:access` selected and `mobile:access` unselected. Apple,
-Google, and email are available as domain-level connections. No client secret was created or read.
+one of two user-delegated permissions: `mcp:access` selected and `mobile:access` unselected. Only
+Apple and Google are available as domain-level connections; passwordless email is not promoted.
+No client secret was created or read.
 
 Repeating the previously failing production authorization request resolved the external client and
 reached branded Consentary Universal Login instead of returning `Unknown client`. Interactive login,
