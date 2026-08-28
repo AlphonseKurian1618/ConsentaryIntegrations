@@ -32,7 +32,14 @@ class IntegrationContractTests(unittest.TestCase):
         self.assertIn("fictional data", text)
         self.assertIn("Server-side validation remains mandatory", text)
 
+    def test_auth0_action_is_display_only(self) -> None:
+        text = (ROOT / "auth0/actions/set-client-name.js").read_text(encoding="utf-8")
+        self.assertIn("api.accessToken.setCustomClaim", text)
+        self.assertIn("https://consentary.com/client_name", text)
+        self.assertNotIn("api.idToken", text)
+        self.assertNotIn("addScope", text)
+        self.assertNotIn("api.access.deny", text)
+
 
 if __name__ == "__main__":
     unittest.main()
-

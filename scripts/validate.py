@@ -67,6 +67,8 @@ def validate() -> None:
 
     required = [
         ROOT / "README.md",
+        ROOT / "auth0/README.md",
+        ROOT / "auth0/actions/set-client-name.js",
         ROOT / "providers/README.md",
         ROOT / "providers/claude/README.md",
         ROOT / "providers/claude/oauth.md",
@@ -75,6 +77,14 @@ def validate() -> None:
     for path in required:
         text = path.read_text(encoding="utf-8")
         assert text.strip(), f"{path.relative_to(ROOT)} is empty"
+
+    action = (ROOT / "auth0/actions/set-client-name.js").read_text(encoding="utf-8")
+    assert "api.accessToken.setCustomClaim" in action
+    assert '"https://consentary.com/client_name"' in action
+    assert "api.idToken" not in action
+    assert "addScope" not in action
+    assert "removeScope" not in action
+    assert "api.access.deny" not in action
 
     with (ROOT / "providers/claude/pilot-matrix.csv").open(
         encoding="utf-8", newline=""
@@ -85,4 +95,3 @@ def validate() -> None:
 if __name__ == "__main__":
     validate()
     print("Consentary integration contracts are valid")
-
