@@ -1,17 +1,8 @@
 # Consentary integrations
 
 Provider-specific integration assets for Consentary's OAuth-protected remote MCP service. This
-repository owns connector setup, provider conformance, sanitized interoperability evidence, pilot
-plans, and directory-submission material. It is deliberately separate from the backend and iOS
-repositories so another provider can be added without coupling its lifecycle to the vault runtime.
-
-## Ownership boundary
-
-| Repository | Owns |
-|---|---|
-| `ConsentaryIntegrations` | Provider setup, compatibility contracts, test matrices, pilots, troubleshooting, and directory artifacts |
-| `soffortmcp` | MCP tools, OAuth enforcement, phone-approval orchestration, public connector pages, and server-side validation |
-| `AIVaultApp` | Local vault, phone consent UX, device authentication, and encrypted result delivery |
+repository contains connector setup, provider conformance contracts, sanitized interoperability
+evidence, pilot plans, reusable plugin assets, and directory-submission material.
 
 Provider files never contain credentials or create a second authorization path. The phone remains
 the final authority for disclosure and writes.
