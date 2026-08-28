@@ -35,6 +35,11 @@ authorize only the Auth0 Management API permissions needed to read and delete us
 or a provider package. The public management client ID is supplied as
 `AUTH0_MANAGEMENT_CLIENT_ID`.
 
+For Consentary's Auth0 custom domain, the M2M token request still uses the canonical tenant API
+identifier `https://dev-q8x2d784tv7oil7b.us.auth0.com/api/v2/` as its audience. Obtain that token
+from `auth.consentary.com` and call the Management API through `auth.consentary.com`; do not replace
+the audience with the custom-domain URL.
+
 On confirmed disconnect the backend first writes a strongly consistent block for the connection,
 then deletes matching user/client/API-audience grants and verifies that none remain. A provider
 failure leaves the connection in `cleanup_pending`: MCP traffic remains blocked and a later retry
