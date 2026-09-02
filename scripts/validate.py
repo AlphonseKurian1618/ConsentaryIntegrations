@@ -5,6 +5,7 @@ from __future__ import annotations
 
 import csv
 import json
+import re
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -13,6 +14,27 @@ AGENT_CATALOG = ROOT / "contracts/common/agent-catalog.json"
 CLAUDE_MARKETPLACE = ROOT / ".claude-plugin/marketplace.json"
 OPENAI_MARKETPLACE = ROOT / ".agents/plugins/marketplace.json"
 PLUGIN = ROOT / "plugins/consentary-vault"
+USER_GUIDES = [
+    ROOT / "README.md",
+    ROOT / "providers/chatgpt/README.md",
+    ROOT / "providers/claude/README.md",
+    ROOT / "providers/vscode/README.md",
+    ROOT / "providers/generic-mcp/README.md",
+    PLUGIN / "README.md",
+]
+CLAUDE_INSTALL = (
+    "claude plugin marketplace add AlphonseKurian1618/ConsentaryIntegrations && "
+    "claude plugin install consentary-vault@consentary-plugins"
+)
+CODEX_INSTALL = (
+    "codex plugin marketplace add AlphonseKurian1618/ConsentaryIntegrations && "
+    "codex plugin add consentary-vault@consentary-plugins"
+)
+VSCODE_INSTALL = (
+    "copilot plugin install "
+    "AlphonseKurian1618/ConsentaryIntegrations:plugins/consentary-vault"
+)
+MARKDOWN_LINK = re.compile(r"\[[^\]]+\]\(([^)]+)\)")
 EXPECTED_TOOLS = {
     "list_available_properties": (
         "List available vault properties",
@@ -52,7 +74,74 @@ PILOT_HEADER = [
 ]
 
 
+def validate_user_guides() -> None:
+    root_guide = (ROOT / "README.md").read_text(encoding="utf-8")
+    for heading in (
+        "## ChatGPT",
+        "## Claude",
+        "## Visual Studio Code",
+        "## Codex CLI",
+        "## Other MCP clients",
+    ):
+        assert heading in root_guide
+
+    for term in ("**Full plugin**", "**Connector only**"):
+        assert term in root_guide
+
+    command_locations = {
+        CLAUDE_INSTALL: [
+            ROOT / "README.md",
+            ROOT / "providers/claude/README.md",
+            PLUGIN / "README.md",
+        ],
+        CODEX_INSTALL: [
+            ROOT / "README.md",
+            ROOT / "providers/chatgpt/README.md",
+            PLUGIN / "README.md",
+        ],
+        VSCODE_INSTALL: [
+            ROOT / "README.md",
+            ROOT / "providers/vscode/README.md",
+            PLUGIN / "README.md",
+        ],
+    }
+    for command, locations in command_locations.items():
+        for path in locations:
+            assert command in path.read_text(encoding="utf-8"), (
+                f"{path.relative_to(ROOT)} is missing the supported install command"
+            )
+
+    for path in USER_GUIDES:
+        text = path.read_text(encoding="utf-8")
+        lower = text.lower()
+        assert "https://consentary.com/mcp" in text
+        assert "<this-repository>" not in text
+        assert "curl " not in lower
+        for unsafe_instruction in (
+            "paste your access token",
+            "enter your client secret",
+            "authorization: bearer",
+            "client_secret=",
+            "access_token=",
+        ):
+            assert unsafe_instruction not in lower, (
+                f"{path.relative_to(ROOT)} contains unsafe credential guidance"
+            )
+
+        for target in MARKDOWN_LINK.findall(text):
+            if target.startswith(("https://", "http://", "mailto:", "#")):
+                continue
+            relative_target = target.split("#", 1)[0]
+            if not relative_target:
+                continue
+            destination = (path.parent / relative_target).resolve()
+            assert destination.exists(), (
+                f"broken link in {path.relative_to(ROOT)}: {target}"
+            )
+
+
 def validate() -> None:
+    validate_user_guides()
     catalog = json.loads(CATALOG.read_text(encoding="utf-8"))
     assert catalog["descriptionLimitBytes"] == 2048
     assert catalog["pluginRequired"] is False
