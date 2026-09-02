@@ -1,10 +1,20 @@
 from __future__ import annotations
 
 import importlib.util
+import re
 import unittest
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
+PLUGIN = ROOT / "plugins/consentary-vault"
+USER_GUIDES = [
+    ROOT / "README.md",
+    ROOT / "providers/chatgpt/README.md",
+    ROOT / "providers/claude/README.md",
+    ROOT / "providers/vscode/README.md",
+    ROOT / "providers/generic-mcp/README.md",
+    PLUGIN / "README.md",
+]
 
 
 class IntegrationContractTests(unittest.TestCase):
@@ -50,6 +60,84 @@ class IntegrationContractTests(unittest.TestCase):
         self.assertIn("Do not keep a separate copy before or after the", text)
         self.assertIn("denied or cancelled proposal", text)
         self.assertNotIn("current Claude session", text)
+
+    def test_user_guide_covers_supported_install_paths(self) -> None:
+        claude_install = (
+            "claude plugin marketplace add "
+            "AlphonseKurian1618/ConsentaryIntegrations && "
+            "claude plugin install consentary-vault@consentary-plugins"
+        )
+        codex_install = (
+            "codex plugin marketplace add "
+            "AlphonseKurian1618/ConsentaryIntegrations && "
+            "codex plugin add consentary-vault@consentary-plugins"
+        )
+        vscode_install = (
+            "copilot plugin install "
+            "AlphonseKurian1618/ConsentaryIntegrations:plugins/consentary-vault"
+        )
+        expected = {
+            claude_install: [
+                ROOT / "README.md",
+                ROOT / "providers/claude/README.md",
+                PLUGIN / "README.md",
+            ],
+            codex_install: [
+                ROOT / "README.md",
+                ROOT / "providers/chatgpt/README.md",
+                PLUGIN / "README.md",
+            ],
+            vscode_install: [
+                ROOT / "README.md",
+                ROOT / "providers/vscode/README.md",
+                PLUGIN / "README.md",
+            ],
+        }
+        for command, locations in expected.items():
+            for path in locations:
+                self.assertIn(command, path.read_text(encoding="utf-8"))
+
+        root_guide = (ROOT / "README.md").read_text(encoding="utf-8")
+        for heading in (
+            "## ChatGPT",
+            "## Claude",
+            "## Visual Studio Code",
+            "## Codex CLI",
+            "## Other MCP clients",
+        ):
+            self.assertIn(heading, root_guide)
+        self.assertIn("**Full plugin**", root_guide)
+        self.assertIn("**Connector only**", root_guide)
+        self.assertIn("This fallback is connector only", root_guide)
+
+    def test_user_guides_have_safe_working_relative_links(self) -> None:
+        markdown_link = re.compile(r"\[[^\]]+\]\(([^)]+)\)")
+        for path in USER_GUIDES:
+            text = path.read_text(encoding="utf-8")
+            lower = text.lower()
+            self.assertIn("https://consentary.com/mcp", text)
+            self.assertNotIn("<this-repository>", text)
+            self.assertNotIn("curl ", lower)
+            for unsafe_instruction in (
+                "paste your access token",
+                "enter your client secret",
+                "authorization: bearer",
+                "client_secret=",
+                "access_token=",
+            ):
+                self.assertNotIn(unsafe_instruction, lower)
+
+            for target in markdown_link.findall(text):
+                if target.startswith(("https://", "http://", "mailto:", "#")):
+                    continue
+                relative_target = target.split("#", 1)[0]
+                if not relative_target:
+                    continue
+                destination = (path.parent / relative_target).resolve()
+                self.assertTrue(
+                    destination.exists(),
+                    f"broken link in {path.relative_to(ROOT)}: {target}",
+                )
 
     def test_all_marketplaces_reference_the_same_plugin_source(self) -> None:
         import json
@@ -114,7 +202,10 @@ class IntegrationContractTests(unittest.TestCase):
         text = (ROOT / "providers/chatgpt/oauth.md").read_text(encoding="utf-8")
         self.assertIn("https://chatgpt.com/oauth/client.json", text)
         self.assertIn("PKCE S256", text)
-        self.assertIn("never request `mobile:access`", (ROOT / "providers/chatgpt/README.md").read_text(encoding="utf-8"))
+        chatgpt_guide = (ROOT / "providers/chatgpt/README.md").read_text(
+            encoding="utf-8"
+        )
+        self.assertIn("never request `mobile:access`", chatgpt_guide)
         self.assertIn("label is never", text)
         self.assertNotIn("client_secret=", text)
         self.assertNotIn("access_token=", text)

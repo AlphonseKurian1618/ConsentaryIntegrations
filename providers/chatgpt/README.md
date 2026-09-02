@@ -1,26 +1,61 @@
 # Consentary for ChatGPT and Codex
 
-Consentary is exposed through the same OAuth-protected remote MCP endpoint used by every provider:
-`https://consentary.com/mcp`. The universal package at
-[`../../plugins/consentary-vault/`](../../plugins/consentary-vault/) owns the shared MCP
-configuration and workflow skill. Do not fork or copy those files for ChatGPT.
+Consentary connects ChatGPT and Codex to the same OAuth-protected remote MCP endpoint:
+`https://consentary.com/mcp`.
 
-## ChatGPT development setup
+The **full plugin** includes the MCP connection and Consentary's session-only `vault-workflows`
+skill. A **connector-only** setup reaches the same protected MCP server but does not install the
+skill.
 
-1. In ChatGPT, enable Developer mode and register `https://consentary.com/mcp` as a remote MCP
-   connection.
-2. Complete Authorization Code authentication with PKCE S256. Request only `mcp:access` and
-   `offline_access`; never request `mobile:access` and never provide a client secret.
-3. Copy the generated technical connection ID, which must start with `plugin_asdk_app_`.
-4. Add `plugins/consentary-vault/.app.json` containing that real ID and add
-   `"apps": "./.app.json"` to the Codex plugin manifest. Never invent a placeholder ID.
-5. Validate the package, then install it from the repository marketplace in a fresh ChatGPT/Codex
-   conversation.
+## ChatGPT Desktop — full plugin
 
-Production registration completed on 2026-08-28 using ChatGPT's per-plugin CIMD client, PKCE S256,
-`mcp:access offline_access`, and no shared client secret. The real production connection ID is
-stored in the shared plugin's `.app.json`. Interactive authorization, tool discovery, refresh,
-disconnect/reconnect, and the acceptance matrix remain pending.
+Install [Codex CLI](https://learn.chatgpt.com/docs/codex/cli) if needed, then add the Consentary
+marketplace:
+
+```bash
+codex plugin marketplace add AlphonseKurian1618/ConsentaryIntegrations
+```
+
+Restart ChatGPT Desktop, open **Plugins**, select **Consentary Plugins** under your personal
+marketplaces, and install **Consentary Vault**. Start a new chat after installation and complete
+browser sign-in when prompted.
+
+## ChatGPT web — connector-only fallback
+
+The repository plugin is not currently listed in ChatGPT's public plugin directory. To add only the
+remote connection:
+
+1. Open **Settings → Security and login** and enable **Developer mode**.
+2. Open [ChatGPT Plugins](https://chatgpt.com/plugins) and select the plus button.
+3. Name the connection **Consentary**, choose a public remote MCP connection, and enter
+   `https://consentary.com/mcp`.
+4. Review the discovered tools and complete browser sign-in.
+5. Start a new chat and add Consentary from the tools menu.
+
+This path does not install `vault-workflows`. Phone consent and server-side validation still apply.
+
+## Codex CLI — full plugin
+
+Install the marketplace and plugin with one command:
+
+```bash
+codex plugin marketplace add AlphonseKurian1618/ConsentaryIntegrations && codex plugin add consentary-vault@consentary-plugins
+```
+
+Start a new Codex session after installation and complete browser sign-in when prompted.
+
+## Verify the connection
+
+Confirm that the client discovers:
+
+- `list_available_properties`
+- `list_templates`
+- `request_properties`
+- `add_properties`
+
+Do not enter a client secret or paste an access token, authorization header, or private key. The
+client must discover OAuth from the endpoint and open Consentary's browser sign-in flow. It may
+request `mcp:access offline_access`; it must never request `mobile:access`.
 
 ## Example prompts
 
@@ -31,8 +66,33 @@ disconnect/reconnect, and the acceptance matrix remain pending.
 - **Phone-approved change:** “Inspect Consentary templates, then propose saving a fictional vehicle
   for review on my phone.”
 
-The MCP server descriptions are sufficient for safe connector operation. The shared skill repeats
-the workflow and session-only privacy rules for packaged distribution, but server-side validation
-and phone consent remain mandatory whether or not a host invokes the skill.
+Every value request and proposed write returns to the linked iPhone for approval. The full plugin
+also instructs the agent not to retain retrieved or write-bound data beyond the current chat
+session. These instructions do not change the provider's account-level conversation-retention
+settings.
 
-See [`oauth.md`](oauth.md) for the OAuth boundary and [`rollout.md`](rollout.md) for acceptance.
+## Troubleshooting
+
+- **Consentary is not in Plugins:** confirm the marketplace command succeeded, restart ChatGPT
+  Desktop, and look under the personal **Consentary Plugins** source.
+- **Developer mode is unavailable:** account or workspace policy may block custom connections; ask
+  the workspace administrator.
+- **The tools are missing:** start a new chat and enable Consentary in the tools menu.
+- **OAuth fails:** disconnect Consentary and reconnect it. Do not create a client secret.
+- **No phone notification appears:** open Consentary, confirm the iPhone is online and linked, check
+  notifications, and make one new request.
+
+## Maintainer notes
+
+The universal package at
+[`../../plugins/consentary-vault/`](../../plugins/consentary-vault/) is the canonical source for the
+OpenAI/Codex manifest, registered app mapping, MCP configuration, and workflow skill. Do not fork or
+copy those files here.
+
+Production registration was completed on 2026-08-28 using ChatGPT's per-plugin CIMD client, PKCE
+S256, `mcp:access offline_access`, and no shared client secret. The real production connection ID is
+stored in the shared plugin's `.app.json`. Interactive acceptance remains tracked in
+[`rollout.md`](rollout.md).
+
+See [`oauth.md`](oauth.md) for the OAuth boundary and the
+[official OpenAI plugin guide](https://learn.chatgpt.com/docs/plugins) for current host behavior.

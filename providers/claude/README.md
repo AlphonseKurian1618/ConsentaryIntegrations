@@ -1,51 +1,96 @@
 # Consentary for Claude
 
-Consentary is exposed to Claude as an OAuth-protected remote MCP connector at
-`https://consentary.com/mcp`. The connector is installed in Claude.ai or Claude Desktop and is then
-available on Claude mobile after the same account is linked and its tools are enabled.
+Consentary connects Claude to `https://consentary.com/mcp` and sends every value disclosure or
+proposed vault change to your linked iPhone for approval.
 
-Version 1 uses the existing four-tool MCP contract. It requires no Anthropic SDK, Anthropic API
-key, static Claude OAuth client, client secret, token persistence, or Claude-specific iOS code.
-MCP metadata and server-side validation are the canonical operating contract.
+The **full plugin** includes the remote MCP connection and Consentary's session-only
+`vault-workflows` skill. A **connector-only** setup reaches the MCP server without the skill.
 
-## Supported workflow
+## Claude Code — one command
 
-1. Add `https://consentary.com/mcp` as a custom connector without entering a client ID or secret.
-2. Complete Authorization Code authentication with PKCE S256 and approve `mcp:access` plus
-   `offline_access`. Never grant `mobile:access` to the connector.
-3. Enable the Consentary tools in the conversation.
-4. Discover current property handles before requesting or updating values. Inspect templates before
-   creating items or fields. Copy all handles and metadata exactly.
-5. Make one disclosure or write request and wait for the phone decision. Never poll or attempt to
-   bypass the phone. Refresh discovery after a write.
+Install and sign in to a current version of Claude Code, then run:
 
-The public, no-tracking user guide is
-[`https://consentary.com/connectors/claude`](https://consentary.com/connectors/claude).
+```bash
+claude plugin marketplace add AlphonseKurian1618/ConsentaryIntegrations && claude plugin install consentary-vault@consentary-plugins
+```
+
+Restart Claude Code, run `/mcp`, select Consentary, and complete browser sign-in.
+
+## Claude web or Desktop — no terminal
+
+1. Open **Customize → Plugins**.
+2. Under **Personal plugins**, select **+ → Add marketplace → Add from a repository**.
+3. Enter `AlphonseKurian1618/ConsentaryIntegrations` or the full repository URL.
+4. Install **Consentary Vault**.
+5. Start a new chat and complete browser sign-in when prompted.
+
+Plugin availability can depend on the Claude plan and workspace policy.
+
+## Connector-only fallback
+
+If Personal plugins are unavailable, open **Customize → Connectors → Add custom connector** and
+enter `https://consentary.com/mcp`. Do not enter a client ID or secret. Complete browser sign-in,
+start a new chat, and enable the Consentary tools.
+
+This fallback does not install `vault-workflows`. Organization-managed Claude accounts may require
+an Owner to add the connector first.
+
+## Verify the connection
+
+Confirm that Claude discovers:
+
+- `list_available_properties`
+- `list_templates`
+- `request_properties`
+- `add_properties`
+
+The connection may request `mcp:access offline_access`; it must never request `mobile:access`.
+
+Then try:
+
+> Show what kinds of information are available in my Consentary vault. Do not request any values.
+
+Metadata discovery does not reveal plaintext values. Every value request and proposed write still
+requires the normal iPhone consent flow.
 
 ## Example prompts
 
-- **Metadata only:** “List the kinds of information available in my Consentary vault. Do not
-  request any values.”
 - **Selective disclosure:** “Discover my available contact fields, then ask my phone to share only
   the email address I select for this application.”
 - **Phone-approved change:** “Inspect Consentary's templates, then propose a fictional vehicle item
   for my phone to review.”
 
+The full plugin instructs Claude not to retain data retrieved from Consentary or proposed for a
+Consentary write beyond the current chat session. These instructions do not change Claude's
+account-level conversation-retention settings.
+
 ## Troubleshooting
 
-- **Linking fails before login:** capture only the OAuth error code and sanitized URL parameters;
-  compare them with [`oauth.md`](oauth.md). Never paste a token or authorization code.
-- **No notification:** verify notifications and phone linking, then use inbox recovery. Do not
-  repeatedly call the tool.
-- **Timeout:** unlock or reconnect the phone and start a new request. A force-quit iOS app is not
-  background-launched by notification.
-- **Stale handle:** run discovery again and use the newly returned opaque handle.
+- **The plugin command is missing:** update Claude Code and restart it.
+- **The marketplace is missing:** rerun the marketplace command, then restart Claude Code or Claude
+  Desktop.
+- **Linking fails before login:** record only the OAuth error code and sanitized URL parameters.
+  Never paste a token or authorization code.
+- **No notification appears:** open Consentary, verify notifications and phone linking, and make one
+  new request. Do not repeatedly call the tool.
+- **The request times out:** open and reconnect the iPhone, then start a new request. A force-quit
+  iOS app is not background-launched by a notification.
+- **A handle is stale:** run discovery again and use the newly returned opaque handle.
 - **OAuth stops refreshing:** disconnect the connector and reconnect it; do not create a client
   secret.
 - **Tools are missing on mobile:** finish linking on web or Desktop, open a new mobile conversation,
   and enable the connected tools.
 
-See [`rollout.md`](rollout.md) for the release gate. The connector can run independently, while the
-distributable [`Consentary Vault` plugin](../../plugins/consentary-vault/) bundles the shared remote
-MCP connection and workflow guidance for broad installation. The same instruction source is used
-for Claude, ChatGPT, and Codex; provider-specific copies are prohibited.
+The public user guide is also available at
+[consentary.com/connectors/claude](https://consentary.com/connectors/claude).
+
+## Maintainer notes
+
+The distributable [`Consentary Vault` plugin](../../plugins/consentary-vault/) is the canonical
+source for Claude, ChatGPT, Codex, VS Code, and compatible agents. Provider-specific copies are
+prohibited. MCP metadata and server-side validation remain authoritative whether or not the host
+loads the skill.
+
+See [`oauth.md`](oauth.md) for the OAuth boundary, [`rollout.md`](rollout.md) for the release gate,
+and [Anthropic's plugin installation guide](https://code.claude.com/docs/en/discover-plugins) for
+current host instructions.
