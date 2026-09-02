@@ -34,6 +34,7 @@ VSCODE_INSTALL = (
     "copilot plugin install "
     "AlphonseKurian1618/ConsentaryIntegrations:plugins/consentary-vault"
 )
+TESTFLIGHT_URL = "https://testflight.apple.com/join/dby4h3Vz"
 MARKDOWN_LINK = re.compile(r"\[[^\]]+\]\(([^)]+)\)")
 EXPECTED_TOOLS = {
     "list_available_properties": (
@@ -87,6 +88,8 @@ def validate_user_guides() -> None:
 
     for term in ("**Full plugin**", "**Connector only**"):
         assert term in root_guide
+
+    assert TESTFLIGHT_URL in root_guide
 
     command_locations = {
         CLAUDE_INSTALL: [

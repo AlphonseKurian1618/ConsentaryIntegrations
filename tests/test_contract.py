@@ -109,6 +109,9 @@ class IntegrationContractTests(unittest.TestCase):
         self.assertIn("**Full plugin**", root_guide)
         self.assertIn("**Connector only**", root_guide)
         self.assertIn("This fallback is connector only", root_guide)
+        self.assertIn(
+            "https://testflight.apple.com/join/dby4h3Vz", root_guide
+        )
 
     def test_user_guides_have_safe_working_relative_links(self) -> None:
         markdown_link = re.compile(r"\[[^\]]+\]\(([^)]+)\)")
