@@ -22,7 +22,8 @@ The gate passes only when:
 - the access token has `mcp:access`, never `mobile:access`, and refreshes through `offline_access`;
 - the phone displays the signed registered name **ChatGPT**, without using it for authorization;
 - direct connector workflows succeed without depending on the shared skill;
-- packaged workflows follow the shared skill and never persist vault-derived data; and
+- packaged workflows follow the shared skill and never persist data retrieved from Consentary or
+  proposed for writing to Consentary beyond the current chat session; and
 - plaintext appears only in explicitly approved structured results, never summaries, receipts,
   logs, telemetry, plugin files, tests, or pilot evidence.
 

@@ -49,8 +49,10 @@ OAuth/interoperability defect blocks the pilot. Roll back through the existing d
 Validate the companion [`Consentary Vault` plugin](../../plugins/consentary-vault/) separately from the connector-only
 matrix. The plugin may bundle the public remote MCP configuration and instruction-only workflow
 guidance, but it must contain no credentials, custom authorization logic, token handling, or
-alternative path around phone consent. It must instruct Claude not to persist any vault-derived
-data beyond the current session. Server-side validation remains mandatory.
+alternative path around phone consent. It must instruct Claude not to persist any data retrieved
+from Consentary or proposed for writing to Consentary beyond the current chat session. Consentary
+itself is the only permitted storage destination for a phone-approved write; Claude must not keep a
+separate copy. Server-side validation remains mandatory.
 
 ## Anthropic directory package
 

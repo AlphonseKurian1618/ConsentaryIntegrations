@@ -1,6 +1,6 @@
 ---
 name: vault-workflows
-description: Use Consentary vault tools safely for metadata discovery, phone-approved selective disclosure, and phone-approved vault changes. Apply in VS Code and other skills-compatible agents whenever a task reads from or writes to Consentary, including when the user does not invoke this skill explicitly.
+description: Use Consentary vault tools safely for metadata discovery, phone-approved selective disclosure, phone-approved vault changes, and session-only handling of retrieved and write-bound data. Apply in VS Code and other skills-compatible agents whenever a task reads from or writes to Consentary, including when the user does not invoke this skill explicitly.
 ---
 
 # Consentary vault workflows
@@ -18,27 +18,36 @@ the vault.
 
 ## Session-only data handling
 
-Treat all Consentary vault-derived information as ephemeral and confidential. This includes
-plaintext values, property handles, item identifiers, field metadata, approval results, and tool
-responses.
+Treat all Consentary-handled information as ephemeral and confidential:
 
-- Use vault-derived information only in the current conversation and only to complete the user's
-  immediate request.
-- Do not store or copy vault-derived information into files, project content, assistant memory,
+- **Retrieved information** includes every value or piece of data returned by Consentary, including
+  plaintext values, property handles, item identifiers, field metadata, approval results, and tool
+  responses.
+- **Write-bound information** includes every value supplied, inferred, drafted, transformed, or
+  proposed for writing to Consentary, whether the write is awaiting review, approved, denied, or
+  cancelled.
+
+- Use Consentary-handled information only in the current chat session and only to complete the
+  user's immediate request. Never retain it beyond the current chat session.
+- Do not store or copy Consentary-handled information into files, project content, assistant memory,
   plugin data, notes, logs, caches, environment variables, shell history, clipboards, databases,
-  external services, messages, tickets, telemetry, training examples, tests, or fixtures.
+  external services, messages outside this chat, tickets, telemetry, training examples, tests, or
+  fixtures.
 - Do not invoke any tool whose purpose or effect is to persist, upload, transmit, or relay
-  vault-derived information, except the Consentary tool calls required for the user's current
+  Consentary-handled information, except the Consentary tool calls required for the user's current
   phone-approved workflow.
-- Do not include vault-derived information in summaries intended for later conversations or
+- Do not include Consentary-handled information in summaries intended for later conversations or
   handoffs.
 - Keep plaintext out of the response unless the user's current request requires the specifically
   approved value. Reveal the minimum approved data needed and do not repeat it unnecessarily.
-- If the user asks to save, remember, export, log, upload, or send vault-derived information outside
-  the current conversation, refuse that persistence step and explain that this plugin requires
-  session-only handling.
-- When the request is complete, do not take any action to retain the vault-derived information or
-  make it available to a later conversation.
+- For a write, the only permitted persistence is the copy stored by Consentary through the normal
+  `add_properties` workflow after phone approval. Do not keep a separate copy before or after the
+  write, and do not treat a denied or cancelled proposal as permission to retain it.
+- If the user asks to save, remember, export, log, upload, or send Consentary-handled information
+  outside the current chat session, refuse that persistence step and explain that this plugin
+  requires session-only handling.
+- When the request is complete, do not take any action to retain Consentary-handled information or
+  make it available to a later chat session.
 
 These instructions constrain actions taken by the assistant and this plugin. They do not change the
 hosting product's account-level conversation retention policy; users must configure that policy
