@@ -9,7 +9,7 @@
     {
       "name": "consentary-vault",
       "source": "./plugins/consentary-vault",
-      "description": "Connects Claude to Consentary with phone-approved vault workflows and session-only handling of vault data.",
+      "description": "Connects Claude to Consentary with phone-approved vault workflows and session-only handling of retrieved values and proposed writes.",
       "category": "Productivity",
       "tags": ["consentary", "vault", "privacy", "mcp"]
     }

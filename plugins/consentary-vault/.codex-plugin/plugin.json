@@ -1,6 +1,6 @@
 {
   "name": "consentary-vault",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Use Consentary's phone-approved vault through one reusable remote MCP workflow.",
   "author": {
     "name": "Consentary",

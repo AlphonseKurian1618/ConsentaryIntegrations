@@ -147,7 +147,9 @@ def validate() -> None:
         "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json"
     )
     assert portable_manifest["name"] == "consentary-vault"
-    assert portable_manifest["version"] == "1.0.0"
+    assert portable_manifest["version"] == "1.0.1"
+    assert claude_manifest["version"] == portable_manifest["version"]
+    assert openai_manifest["version"] == portable_manifest["version"]
 
     portable_mcp = json.loads((PLUGIN / "mcp.json").read_text(encoding="utf-8"))
     assert portable_mcp["$schema"] == (
@@ -169,12 +171,18 @@ def validate() -> None:
     assert "VS Code and other skills-compatible agents" in skill
     assert "This skill does not contain credentials, perform OAuth" in skill
     for privacy_rule in (
-        "only in the current conversation",
-        "Do not store or copy vault-derived information",
+        "only in the current chat session",
+        "Never retain it beyond the current chat session",
+        "Retrieved information",
+        "Write-bound information",
+        "Do not store or copy Consentary-handled information",
         "assistant memory",
         "plugin data",
         "external services",
         "summaries intended for later conversations or",
+        "the only permitted persistence is the copy stored by Consentary",
+        "Do not keep a separate copy before or after the",
+        "denied or cancelled proposal",
     ):
         assert privacy_rule in skill
 

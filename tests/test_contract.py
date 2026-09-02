@@ -36,11 +36,19 @@ class IntegrationContractTests(unittest.TestCase):
         text = (
             ROOT / "plugins/consentary-vault/skills/vault-workflows/SKILL.md"
         ).read_text(encoding="utf-8")
-        self.assertIn("only in the current conversation", text)
-        self.assertIn("Do not store or copy vault-derived information", text)
+        self.assertIn("only in the current chat session", text)
+        self.assertIn("Never retain it beyond the current chat session", text)
+        self.assertIn("Retrieved information", text)
+        self.assertIn("Write-bound information", text)
+        self.assertIn("Do not store or copy Consentary-handled information", text)
         self.assertIn("assistant memory", text)
         self.assertIn("external services", text)
         self.assertIn("later conversations or", text)
+        self.assertIn(
+            "the only permitted persistence is the copy stored by Consentary", text
+        )
+        self.assertIn("Do not keep a separate copy before or after the", text)
+        self.assertIn("denied or cancelled proposal", text)
         self.assertNotIn("current Claude session", text)
 
     def test_all_marketplaces_reference_the_same_plugin_source(self) -> None:
