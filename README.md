@@ -6,11 +6,13 @@ for approval.
 
 The production remote MCP endpoint is `https://consentary.com/mcp`.
 
+**Get Consentary for iPhone:** [Join the beta on TestFlight](https://testflight.apple.com/join/dby4h3Vz).
+
 ## Before you install
 
 You need:
 
-- Consentary on a linked iPhone with notifications enabled;
+- the Consentary TestFlight beta installed on a linked iPhone with notifications enabled;
 - a current version of your AI client with plugins or remote HTTP MCP enabled; and
 - permission to add plugins or MCP servers if your device or workspace is managed.
 
